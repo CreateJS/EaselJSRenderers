@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Pluggable Renderers</title>
+
+<link href="styles.css" rel="stylesheet" type="text/css" />
+
+
+<script>
+	// currently, the renderers don't work with the createjs namespace, so we'll bypass it.
+	var createjs = this;
+</script>
+<script src="../lib/easeljs-NEXT.min.js"></script>
+
+<script>
+var rendererName;
+var rendererClass;
+var rotate = true;
+var scale = true;
+var useAlpha = true;
+var numParticles = 1;
+
+var renderer;
+var root;
+
+var img = new Image();
+var particleTemplate;
+var w=1000;
+var h=600;
+var fpsDiv;
+
+function init() {
+	rendererName = "EASELJS DEFAULT";
+	numParticles = parseInt(document.getElementById("numParticles").value);
+	rotate = !!document.getElementById("rotate").checked;
+	scale = !!document.getElementById("scale").checked;
+	useAlpha = !!document.getElementById("useAlpha").checked;
+	
+	var target = document.getElementById("target");
+	fpsDiv = document.getElementById("fps");
+	fpsDiv.style.pixelWidth = w+"px";
+
+	root = new Stage(target);
+
+	img.onload = handleImageLoad;
+	img.src = "img/sparkle_21x23.png";
+}
+
+function handleImageLoad() {
+
+	// this instance will be cloned as needed to create new particles.
+	// by default, it will loop through all of the frames in the image.
+	var spriteSheetData = {
+		images: [img],
+		frames: {width:21, height:23, regX:21>>1, regY:23>>1}
+	}
+	
+	particleTemplate = new BitmapAnimation(new SpriteSheet(spriteSheetData));
+
+	// start the tick and point it at the window so we can do some work before updating the stage:
+	Ticker.setFPS(100);
+	Ticker.addListener(window);
+}
+
+
+function tick() {
+	// loop through all of the active particles on stage:
+	var l = root.getNumChildren();
+	for (var i=l-1; i>=0; i--) {
+		var particle = root.getChildAt(i);
+
+		// apply gravity and friction
+		particle.vY += 2;
+		particle.vX *= 0.98;
+
+		// update position, scale, and alpha:
+		particle.x += particle.vX;
+		particle.y += particle.vY;
+
+		particle.currentFrame = Math.random()*12|0;
+
+		//remove particles that are off screen or not invisble
+		if (particle.alpha <= 0 || particle.y > h) {
+			root.removeChildAt(i);
+			l--;
+		}
+	}
+	
+	if (l<numParticles) { addParticles(numParticles-l,w>>1,h, 60); }
+
+	document.getElementById("fps").innerText = rendererName + ": "+Math.round(Ticker.getMeasuredFPS())+" fps";
+	// draw the updates to stage
+	root.update();
+}
+
+function addParticles(count, x, y, speed) {
+	//create the specified number of particles
+	for (var i=0; i<count; i++) {
+		// clone the original particle, so we don't need to set shared properties:
+		var particle = particleTemplate.clone();
+
+		// set display properties:
+		particle.x = x;
+		particle.y = y;
+		
+		if (rotate) { particle.rotation = Math.random()*360; }
+		if (scale) { particle.scaleX = particle.scaleY = Math.random()+0.5; }
+		if (useAlpha) { particle.alpha = Math.random()*0.8+0.2; }
+
+		// set up velocities:
+		var a = Math.PI/2*Math.random()-Math.PI*0.75;
+		var v = Math.random()*speed;
+		particle.vX = Math.cos(a)*v;
+		particle.vY = Math.sin(a)*v;
+		//particle.gotoAndPlay(0);
+
+		// add to the display list:
+		root.addChild(particle);
+	}
+}
+
+</script>
+</head>
+
+<body>
+	<div class="description">
+	<input type="button" value="reload" onclick="window.location.reload()"/>
+	|
+	<span id="fps">
+	Particles: 
+	<input type="text" id="numParticles" value="1000" maxlength="5" size="4"/>
+	<input type="checkbox" id="useAlpha" checked="checked"/>
+	<label for="useAlpha">alpha</label>
+	<input type="checkbox" id="rotate"/>
+	<label for="rotate">rotate</label>
+	<input type="checkbox" id="scale"/>
+	<label for="scale">scale</label>
+		
+	
+	<input type="button" value="run" onclick="init()">
+	</span>
+	</div>
+	<canvas id="target" width="1000" height="600">
+
+	</canvas>
+</body>
+</html>
