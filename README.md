@@ -11,26 +11,26 @@ Currently, these renderers have only been developed for and tested in Webkit bro
 Current supported surfaces include:
 
 **Null renderer:**
-RendererNullMtx - no rendering. Useful for isolating calculation vs display costs.
+* RendererNullMtx - no rendering. Useful for isolating calculation vs display costs.
 
 **Canvas 2D:**
-Renderer2DMtx - uses the EaselJS matrix class avoiding save & restore.
-Renderer2D - transformation based renderer using save & restore.
+* Renderer2DMtx - uses the EaselJS matrix class avoiding save & restore.
+* Renderer2D - transformation based renderer using save & restore.
 
 **HTML DOM:**
-RendererDOMMtx - uses the EaselJS matrix, persistent DOM elements & document fragments.
-RendererDOMMtxStr - generates innerHTML on the surface div using matrix values.
-RendererDOMStr - generates innerHTML on the surface div using transforms.
+* RendererDOMMtx - uses the EaselJS matrix, persistent DOM elements & document fragments.
+* RendererDOMMtxStr - generates innerHTML on the surface div using matrix values.
+* RendererDOMStr - generates innerHTML on the surface div using transforms.
 
 **SVG:**
-RendererSVGMtx - uses the EaselJS matrix, persistent SVG elements & document fragments.
-RendererSVGMtxStr - generates SVG strings using matrix values.
-RendererSVGStr - generates SVG strings using transforms.
+* RendererSVGMtx - uses the EaselJS matrix, persistent SVG elements & document fragments.
+* RendererSVGMtxStr - generates SVG strings using matrix values.
+* RendererSVGStr - generates SVG strings using transforms.
 
 **WebGL:**
-RendererWebGL - sample WebGL renderer. Lots of room for optimizations.
+* RendererWebGL - sample WebGL renderer. Lots of room for optimizations.
 
 **Flash:**
-RendererSWF - very rough, outdated Flash renderer. Included for reference only.
+* RendererSWF - very rough, outdated Flash renderer. Included for reference only.
 
 The renderers that are most stable, and would make the most sense to extend moving forward are: Renderer2DMtx, RendererDOMMtx, and RendererWebGL.
