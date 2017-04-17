@@ -1,4 +1,4 @@
-##EASELJS DYNAMIC RENDERERS:
+## EASELJS DYNAMIC RENDERERS:
 
 This is an experiment that aims to provide runtime pluggable renderers for a subset EaselJS content. They allow you to create your content for EaselJS, then render it to a variety of surfaces (ex. Canvas, WebGL, HTML DOM) dynamically at runtime. It is really only intended as a proof of concept, and as a starting point for more complete renderers.
 
@@ -8,7 +8,7 @@ Currently, most renderers support displaying Bitmap, BitmapAnimation, Container,
 
 Currently, these renderers have only been developed for and tested in Webkit browsers, as proofs of concept. There is a lot of room for improvement and optimization. For example, it should be possible to extend these renderers to support Text directly, as well as providing mouse & possibly touch interaction for all surfaces. Most renderers (WebGL in particular) would also benefit from sprite sheet generation to reduce texture count, most likely via SpriteSheetBuilder.
 
-##Supported surfaces:
+## Supported surfaces:
 
 **Null renderer:**
 * RendererNullMtx - no rendering. Useful for isolating calculation vs display costs.
